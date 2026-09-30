@@ -86,7 +86,7 @@ void StCdInterrupt(void) {
         if (stream_emulation_base)
             g_psyq_cd_stream_emulation_sector_index = 0;
         else
-            *(volatile u16*)&CURRENT_HEADER.status;
+            CURRENT_HEADER.status;
         g_psyq_cd_stream_diagnostic_code = 5;
         CURRENT_HEADER.status = StFREE;
         return;
