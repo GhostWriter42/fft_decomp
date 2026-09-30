@@ -222,6 +222,34 @@ without changing the bytes.
   `g_dead_unit_roster_id`) because it holds several identifier kinds; keep
   its name generic.
 
+## Undefined behaviour a native build must neutralise
+
+Found by compiling the sources with a modern GCC (`-O2 -Wuninitialized -Wsequence-point -Waggressive-loop-optimizations …`)
+and checking each hit by hand. None of these changes the PS1 behaviour: each is a spot where the retail bytes rely on an
+unassigned value, an evaluation order, or an array view wider than its declaration.
+
+- `src/battle/battle_effect_reflect_secondary_handler.c`: the chained stores
+  `clut[b][((lit = t - 1) - span) * 2] = clut[b][(lit - span) * 2 + 1] = …` (and the `cleared` twin) assign `lit` in one
+  subscript and read it in the other. C leaves that order unspecified; the target evaluates the assignment first. A portable
+  spelling assigns before the statement.
+- `src/battle/battle_map_dispatch_gns_resource.c`: `result` is never assigned, so the function returns an indeterminate
+  value; every caller ignores it.
+- `src/battle/battle_camera_reset_script_transform.c`: passes its unassigned local `buffer` as the colour and light
+  arguments of `battle_map_light_matrix_command`; commands `0x61` and `0x62` do not read them.
+- `src/battle/battle_menu_animate_window_quad_crop.c` and `src/world/world_menu_animate_window_quad_crop{,_full}.c`:
+  `source` is never assigned; `battle_menu_zoom_cursor_frame` does not use its first parameter.
+- `src/battle/battle_sound_stop_weather_sfx.c` returns an indeterminate saved-register value; no caller uses it.
+- Arrays accessed through views wider than their declaration: `g_battle_menu_ability_display_flags[20]` is cleared by an
+  80-entry loop in `battle_menu_build_ability_list` and `world_menu_build_ability_list`;
+  `g_main_terrain_movement_cost_tables[][64]` is read across 256 entries in `battle_move_calculate_pathing`;
+  `main_unit_set_equipment_attributes` merges three consecutive 5-byte status masks through `status_sets.innate[5]`.
+  Correcting the declarations would change the byte-exact indexing, so they stay. GCC's loop optimizer can exploit them:
+  build natively with `-fno-aggressive-loop-optimizations -fno-strict-aliasing`.
+- The `register … __asm__("$N")` pins and the `__asm__("" : "=r"(x) : "0"(expr))` ties are scheduling aids, but a tie whose
+  input differs from its output also *assigns* (for example `wldcore_opcode_add_counter_delta_if_choice`,
+  `world_formation_run_dismiss_unit_menu_step`, `world_menu_open_scrollable_list`): a tool that strips empty asm must
+  turn those into plain assignments, not delete them.
+
 ## Duplicated code
 
 Twins stay separate functions because each lives in its own module or
