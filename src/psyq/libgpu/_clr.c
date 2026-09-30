@@ -6,15 +6,15 @@ int _clr(void* rectangle, u32 color) {
     u32 rgb = color;
     int dimension;
     int value;
-    /* Bindings preserve the clear-packet masks, coordinates and linked restore pointer. */
+    /* Bindings preserve the clear-packet masks and coordinates. */
     register int maximum __asm__("$4");
     u16* limit;
-    register u32 fill_color __asm__("$3");
+    u32 fill_color;
     register u32 mask __asm__("$4");
     u32 area_start;
     u32 offset;
     u32 area_end;
-    register u32* restore __asm__("$6");
+    u32* restore;
     u32 terminator;
     register u32 coordinate __asm__("$2");
     dimension = rect->w;

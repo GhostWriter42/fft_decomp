@@ -17,7 +17,7 @@ int _dws(void* rectangle, u32 pixels) {
     volatile u16* width_limit;
     register volatile u16* height_limit __asm__("$6");
     int unused_frame[4]; /* Retail reserves sixteen additional unused frame bytes. */
-    register int special __asm__("$21");
+    int special;
     __asm__("" : "=r"(rect), "=r"(data) : "0"(rect), "1"(data)); /* Preserve the two original saved argument copies. */
     set_alarm();
     special = 0;

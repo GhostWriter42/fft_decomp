@@ -10,7 +10,7 @@ int ResetGraph(int mode) {
     int reset_mode;
     psyq_gpu_environment_t* state;
     void* draw;
-    register int fill __asm__("$5");
+    int fill;
     register u32 type __asm__("$2"); /* Reusing v0 preserves the original flag constant and indexed loads. */
     u16 width;
     reset_mode = input & 7;

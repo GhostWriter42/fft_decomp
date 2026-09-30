@@ -81,12 +81,11 @@ u32 _SpuSetAnyVoice(s32 on_off, u32 voice_bit, s32 reg_index_low, s32 reg_index_
             *high &= ~((voices >> 16) & 0xff);
             queued_flags |= 1 << ((reg_index_low - PSYQ_SPU_REG_KEY_OFF_LOW) >> 1);
         } else {
-            /* The clear-mask and high-offset pins preserve retail reuse of a0. */
             volatile u16* registers = (u16*)_spu_RXX;
             volatile u16* low = (u16*)(low_offset + (u32)registers);
             u32 bits = *low;
-            register u32 clear __asm__("$4");
-            register u32 high_offset __asm__("$4");
+            u32 clear;
+            u32 high_offset;
             volatile u16* high;
             clear = ~voices;
             bits &= clear;

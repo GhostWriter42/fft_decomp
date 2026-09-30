@@ -151,12 +151,10 @@ keep_end:
     compare = vertical_end;
 end_clamped:
     vertical_end = compare;
-    /* Keep timing bits in v0 while the control function is loaded through v1. */
     first = (horizontal_end & 0xfff) << 12;
     command = horizontal_start & 0xfff;
     second = PSYQ_GPU_COMMAND_WORD(PSYQ_GPU_GP1_HORIZONTAL_RANGE);
     timing_dispatch = g_psyq_gpu_dispatch;
-    __asm__("" : "=r"(timing_dispatch) : "0"(timing_dispatch));
     command |= second;
     control = timing_dispatch->control;
     control(first | command);
@@ -164,7 +162,6 @@ end_clamped:
     command = vertical_start & 0x3ff;
     second = PSYQ_GPU_COMMAND_WORD(PSYQ_GPU_GP1_VERTICAL_RANGE);
     timing_dispatch = g_psyq_gpu_dispatch;
-    __asm__("" : "=r"(timing_dispatch) : "0"(timing_dispatch));
     command |= second;
     control = timing_dispatch->control;
     control(first | command);
