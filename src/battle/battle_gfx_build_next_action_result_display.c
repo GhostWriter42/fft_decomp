@@ -206,21 +206,21 @@ s32 battle_gfx_build_next_action_result_display(battle_unit_misc_data_t* unit) {
         break;
     }
 
-    color_2 = *(battle_gfx_sprite_display_data_t* volatile*)&display->displays[2];
-    color_0 = *(battle_gfx_sprite_display_data_t* volatile*)&display->displays[0];
-    color_1 = *(battle_gfx_sprite_display_data_t* volatile*)&display->displays[1];
+    color_2 = display->displays[2];
+    color_0 = display->displays[0];
+    color_1 = display->displays[1];
     color_2->red = red;
     color_1->red = red;
     color_0->red = red;
-    color_2 = *(battle_gfx_sprite_display_data_t* volatile*)&display->displays[2];
-    color_0 = *(battle_gfx_sprite_display_data_t* volatile*)&display->displays[0];
-    color_1 = *(battle_gfx_sprite_display_data_t* volatile*)&display->displays[1];
+    color_2 = display->displays[2];
+    color_0 = display->displays[0];
+    color_1 = display->displays[1];
     color_2->green = green;
     color_1->green = green;
     color_0->green = green;
-    blue_0 = *(battle_gfx_sprite_display_data_t* volatile*)&display->displays[0];
-    blue_1 = *(battle_gfx_sprite_display_data_t* volatile*)&display->displays[1];
-    blue_2 = *(battle_gfx_sprite_display_data_t* volatile*)&display->displays[2];
+    blue_0 = display->displays[0];
+    blue_1 = display->displays[1];
+    blue_2 = display->displays[2];
     blue_2->blue = blue;
     blue_1->blue = blue;
     blue_0->blue = blue;
