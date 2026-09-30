@@ -37,6 +37,18 @@ make build     # build every module and a byte-matching disc (needs the BIN)
 
 `make build` writes `build/disc/output-scus-94221.bin` and `.cue`.
 
+### Windows
+
+The tooling needs LF line endings. Git for Windows defaults to
+`core.autocrlf=true`, which checks files out as CRLF; `.gitattributes` pins the
+repository to LF. If `make check-config` reports that `target/*.yaml` is "not in
+canonical form", the checkout still has CRLF files. Commit or stash your
+changes, then re-checkout:
+
+```sh
+git rm --cached -r -q . && git reset --hard -q
+```
+
 ## Thanks
 
 This project is an ode to the [FFHacktics](https://ffhacktics.com/wiki/)
