@@ -25,8 +25,8 @@ s32 battle_script_filter_unit_id_by_mode(u16* out_id, u16* in_id, s32* mode) {
     s32 i;
     s32 blocked;
     s32 query;
-    /* These return and flag registers preserve the shared epilogue. */
-    register s32 team_bits __asm__("$3");
+    /* This return register preserves the shared epilogue. */
+    s32 team_bits;
     register s32 zero_result __asm__("$2");
     u8 first;
 
