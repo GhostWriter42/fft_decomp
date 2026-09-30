@@ -1,0 +1,3 @@
+# The build tooling (check-config, byte-exact validation) requires LF. Without this,
+# Git for Windows (system core.autocrlf=true) checks out CRLF and check-config fails.
+* text=auto eol=lf
