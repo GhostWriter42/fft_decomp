@@ -249,6 +249,10 @@ unassigned value, an evaluation order, or an array view wider than its declarati
   input differs from its output also *assigns* (for example `wldcore_opcode_add_counter_delta_if_choice`,
   `world_formation_run_dismiss_unit_menu_step`, `world_menu_open_scrollable_list`): a tool that strips empty asm must
   turn those into plain assignments, not delete them.
+- A null test that comes after a dereference of the same pointer, such as `action->attack_accuracy` before `action == 0` in
+  `battle_menu_display_projected_action_effect`: GCC 2.6.3 keeps the test, a modern GCC deletes it
+  (`-fdelete-null-pointer-checks`) and the early exit is never taken natively. Build natively with
+  `-fno-delete-null-pointer-checks` (next to `-fno-aggressive-loop-optimizations -fno-strict-aliasing`).
 
 ## Duplicated code
 
